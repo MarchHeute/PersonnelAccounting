@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PersonnelAccounting.View"
         xmlns:vm="clr-namespace:PersonnelAccounting.ViewModel"
         mc:Ignorable="d"
-        Title="PersonnelAccounting" Height="450" Width="800">
+        Title="PersonnelAccounting" Height="450" Width="600">
     <Window.Resources>
         <vm:PersonnelAccountingViewModel x:Key="viewModel"/>
     </Window.Resources>
@@ -23,16 +23,20 @@
             <Menu Grid.Row="0"
                   Margin="0,0,10,10">
                 <MenuItem Header="Database">
-                    <MenuItem Header="Create"/>
+                    <MenuItem Header="Create"
+                              Command="{Binding CreateCommand}"
+                              CommandParameter="{Binding ElementName=accountsViewModel}"/>
                     <MenuItem Header="Read"
-                              Command="{Binding ReadCommand}"/>
+                              Command="{Binding ReadCommand}"
+                              CommandParameter="{Binding ElementName=accountsViewModel}"/>
                     <MenuItem Header="Update"/>
                     <MenuItem Header="Delete"/>
                 </MenuItem>
             </Menu>
         </Grid>
         <ListView Grid.Column="1"
-                  Margin="5,0,5,0">
+                  Margin="5,0,5,0"
+                  x:Name="accountsViewModel">
             
         </ListView>
     </Grid>

@@ -7,7 +7,7 @@ namespace PersonnelAccounting.Model
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public string? Nickname { get; set; }
         public Owner? Owner { get; set; }
     }

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace PersonnelAccounting.ViewModel.Commands
+namespace PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands
 {
     public class ReadCommand : ICommand
     {
-        public PersonnelAccountingViewModel? PersonnelAccountingViewModel { get; set; }
+        public PersonnelAccountingViewModel? PersonnelAccountingViewModel { get; private set; }
 
-        public event EventHandler? CanExecuteChanged;       
+        public event EventHandler? CanExecuteChanged;
 
         public ReadCommand(PersonnelAccountingViewModel? personnelAccountingViewModel)
         {
@@ -18,7 +19,6 @@ namespace PersonnelAccounting.ViewModel.Commands
         public bool CanExecute(object? parameter)
         {
             return true;
-            //return PersonnelAccountingViewModel?.MongoDatabase is not null;
         }
 
         public void Execute(object? parameter)
@@ -29,8 +29,11 @@ namespace PersonnelAccounting.ViewModel.Commands
 
             listView?.Items.Clear();
 
-            foreach (var account in PersonnelAccountingViewModel.Accounts)
-                listView?.Items.Add(account);
+            if (PersonnelAccountingViewModel.Accounts is not null)
+            {
+                foreach (var account in PersonnelAccountingViewModel.Accounts.AsQueryable().ToList())
+                    listView?.Items.Add($"Account: {account.Nickname}");
+            }
         }
     }
 }

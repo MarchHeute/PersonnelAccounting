@@ -4,11 +4,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PersonnelAccounting.View"
+        xmlns:vm="clr-namespace:PersonnelAccounting.ViewModel"
         mc:Ignorable="d"
-        Title="CreateAccount" Height="400" Width="400">
+        Title="CreateAccount" Height="250" Width="400"
+        DataContext="{DynamicResource viewModel}">
+    <Window.Resources>
+        <vm:CreateAccountViewModel x:Key="viewModel"/>
+    </Window.Resources>
     <Grid>
         <StackPanel Margin="10">
-            
+            <TextBlock Text="Enter nickname:"/>
+            <TextBox Text="{Binding Nickname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Enter firstname:"/>
+            <TextBox Text="{Binding Firstname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Enter lastname:"/>
+            <TextBox Text="{Binding Lastname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Choose job:"/>
+            <ComboBox SelectedValue="{Binding Job, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      x:Name="jobComboBox">
+                <TextBlock Text="Barista"/>
+                <TextBlock Text="Farrier"/>
+                <TextBlock Text="Seller"/>
+                <TextBlock Text="Turner"/>
+            </ComboBox>
+            <Button Margin="0,5,0,0"
+                    Content="Create"
+                    Command="{Binding CreateAccountCommand}"
+                    CommandParameter="{Binding ElementName=jobComboBox}"/>
         </StackPanel>
     </Grid>
 </Window>

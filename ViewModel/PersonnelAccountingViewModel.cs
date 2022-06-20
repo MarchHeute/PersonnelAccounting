@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
 using System.IO;
+using System.Windows;
 
 namespace PersonnelAccounting.ViewModel
 {
@@ -16,10 +17,24 @@ namespace PersonnelAccounting.ViewModel
             MongoDatabase = client.GetDatabase("PersonnelAccounting");
         }
 
-        private string GetPassword()
+        private string? GetPassword()
         {
-            using var reader = new StreamReader($"{Environment.CurrentDirectory}\\password.txt");
-            return reader.ReadToEnd();
+            string? password = string.Empty;
+            string path = $"{Environment.CurrentDirectory}\\password.txt";
+
+            if (!File.Exists(path))
+                using (var fileStream = new FileStream(path, FileMode.CreateNew))
+                    fileStream.Dispose();
+
+            using (var reader = new StreamReader(path))
+            {
+                password = reader.ReadToEnd();
+
+                if (password.Length == 0)
+                    MessageBox.Show($"You must fill file with location {path}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return password;
         }
     }
 }

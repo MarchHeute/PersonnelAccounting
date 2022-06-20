@@ -1,4 +1,6 @@
 ﻿using MongoDB.Driver;
+using System;
+using System.IO;
 
 namespace PersonnelAccounting.ViewModel
 {
@@ -8,10 +10,16 @@ namespace PersonnelAccounting.ViewModel
 
         public PersonnelAccountingViewModel()
         {
-            var settings = MongoClientSettings.FromConnectionString("mongodb+srv://m1adow:<password>@personnelaccounting.mnxlj.mongodb.net/?retryWrites=true&w=majority");
+            var settings = MongoClientSettings.FromConnectionString($"mongodb+srv://m1adow:{GetPassword()}@personnelaccounting.mnxlj.mongodb.net/?retryWrites=true&w=majority");
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             var client = new MongoClient(settings);
             MongoDatabase = client.GetDatabase("PersonnelAccounting");
+        }
+
+        private string GetPassword()
+        {
+            using var reader = new StreamReader($"{Environment.CurrentDirectory}\\password.txt");
+            return reader.ReadToEnd();
         }
     }
 }

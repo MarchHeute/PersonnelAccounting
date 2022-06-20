@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using PersonnelAccounting.Model;
+using PersonnelAccounting.ViewModel.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,8 @@ namespace PersonnelAccounting.ViewModel
 
         public List<Account>? Accounts { get; set; }
 
+        public ReadCommand? ReadCommand { get; set; }
+
         public PersonnelAccountingViewModel()
         {
             var settings = MongoClientSettings.FromConnectionString($"mongodb+srv://m1adow:{GetPassword()}@personnelaccounting.mnxlj.mongodb.net/?retryWrites=true&w=majority");
@@ -20,7 +23,8 @@ namespace PersonnelAccounting.ViewModel
             var client = new MongoClient(settings);
             _mongoDatabase = client.GetDatabase("PersonnelAccounting");
 
-            Accounts = new();
+            Accounts = new List<Account>();
+            ReadCommand = new ReadCommand(this);
         }
 
         private string? GetPassword()
@@ -42,5 +46,7 @@ namespace PersonnelAccounting.ViewModel
 
             return password;
         }
+
+        public void ReadDatabase() => Accounts = _mongoDatabase?.GetCollection<Account>("accounts").AsQueryable().ToList();
     }
 }

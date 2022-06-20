@@ -5,16 +5,23 @@ namespace PersonnelAccounting.ViewModel.Commands
 {
     public class CreateCommand : ICommand
     {
+        public PersonnelAccountingViewModel? PersonnelAccountingViewModel { get; set; }
+
         public event EventHandler? CanExecuteChanged;
+
+        public CreateCommand(PersonnelAccountingViewModel? personnelAccountingViewModel)
+        {
+            PersonnelAccountingViewModel = personnelAccountingViewModel;
+        }
 
         public bool CanExecute(object? parameter)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void Execute(object? parameter)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

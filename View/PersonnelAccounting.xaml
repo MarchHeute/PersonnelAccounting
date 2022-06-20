@@ -24,7 +24,8 @@
                   Margin="0,0,10,10">
                 <MenuItem Header="Database">
                     <MenuItem Header="Create"/>
-                    <MenuItem Header="Read"/>
+                    <MenuItem Header="Read"
+                              Command="{Binding ReadCommand}"/>
                     <MenuItem Header="Update"/>
                     <MenuItem Header="Delete"/>
                 </MenuItem>

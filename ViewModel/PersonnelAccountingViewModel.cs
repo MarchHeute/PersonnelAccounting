@@ -1,5 +1,7 @@
 ﻿using MongoDB.Driver;
+using PersonnelAccounting.Model;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
@@ -7,14 +9,18 @@ namespace PersonnelAccounting.ViewModel
 {
     public class PersonnelAccountingViewModel
     {
-        public IMongoDatabase? MongoDatabase { get; private set; }
+        private IMongoDatabase? _mongoDatabase;
+
+        public List<Account>? Accounts { get; set; }
 
         public PersonnelAccountingViewModel()
         {
             var settings = MongoClientSettings.FromConnectionString($"mongodb+srv://m1adow:{GetPassword()}@personnelaccounting.mnxlj.mongodb.net/?retryWrites=true&w=majority");
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             var client = new MongoClient(settings);
-            MongoDatabase = client.GetDatabase("PersonnelAccounting");
+            _mongoDatabase = client.GetDatabase("PersonnelAccounting");
+
+            Accounts = new();
         }
 
         private string? GetPassword()

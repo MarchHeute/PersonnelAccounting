@@ -10,7 +10,7 @@
     <Window.Resources>
         <vm:PersonnelAccountingViewModel x:Key="viewModel"/>
     </Window.Resources>
-    <Grid>
+    <Grid DataContext="{StaticResource viewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="3*"/>
@@ -24,6 +24,7 @@
                   Margin="0,0,10,10">
                 <MenuItem Header="Database">
                     <MenuItem Header="Create"/>
+                    <MenuItem Header="Read"/>
                     <MenuItem Header="Update"/>
                     <MenuItem Header="Delete"/>
                 </MenuItem>

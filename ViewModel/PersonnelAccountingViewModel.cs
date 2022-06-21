@@ -2,12 +2,13 @@
 using PersonnelAccounting.Model;
 using PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 
 namespace PersonnelAccounting.ViewModel
 {
-    public class PersonnelAccountingViewModel
+    public class PersonnelAccountingViewModel : INotifyPropertyChanged
     {
         private IMongoDatabase? _mongoDatabase;
 
@@ -17,12 +18,32 @@ namespace PersonnelAccounting.ViewModel
 
         public ReadCommand? ReadCommand { get; private set; }
 
+        public UpdateAndDeleteViewModel? UpdateAndDeleteViewModel { get; private set; }
+
+        private string? _selectedAccount;
+
+        public string? SelectedAccount
+        {
+            get => _selectedAccount;
+            set
+            {
+                _selectedAccount = value?.Replace("Account: ", "");
+                UpdateAndDeleteViewModel?.SwitchVisibility(Visibility.Visible);
+                UpdateAndDeleteViewModel?.FillFields(GetAccountFromSelectedName());
+                OnPropertyChanged(nameof(SelectedAccount));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public PersonnelAccountingViewModel()
         {
             CreateConnection();
 
             CreateCommand = new CreateCommand(this);
             ReadCommand = new ReadCommand(this);
+
+            UpdateAndDeleteViewModel = new UpdateAndDeleteViewModel();
         }
 
         private void CreateConnection()
@@ -53,6 +74,11 @@ namespace PersonnelAccounting.ViewModel
             return password;
         }
 
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public void ReadDatabase()
         {
             try
@@ -75,6 +101,22 @@ namespace PersonnelAccounting.ViewModel
             {
                 MessageBox.Show(exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private Account? GetAccountFromSelectedName()
+        {
+            Account? account = new();
+
+            try
+            {
+                account = Accounts.Find(a => a.Nickname == SelectedAccount).FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return account;
         }
     }
 }

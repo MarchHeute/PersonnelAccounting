@@ -23,21 +23,43 @@
             <Menu Grid.Row="0"
                   Margin="0,0,10,10">
                 <MenuItem Header="Database">
-                    <MenuItem Header="Create"
-                              Command="{Binding CreateCommand}"
-                              CommandParameter="{Binding ElementName=accountsViewModel}"/>
                     <MenuItem Header="Read"
                               Command="{Binding ReadCommand}"
                               CommandParameter="{Binding ElementName=accountsViewModel}"/>
-                    <MenuItem Header="Update"/>
-                    <MenuItem Header="Delete"/>
+                    <MenuItem Header="Create"
+                              Command="{Binding CreateCommand}"
+                              CommandParameter="{Binding ElementName=accountsViewModel}"/>
                 </MenuItem>
             </Menu>
+            <StackPanel Grid.Row="1"
+                        Margin="5,5,10,10"
+                        Visibility="{Binding UpdateAndDeleteViewModel.Visibility}">
+                <TextBlock Text="Nickname:"/>
+                <TextBox Text="{Binding UpdateAndDeleteViewModel.Nickname}"/>
+                <TextBlock Text="Firstname:"/>
+                <TextBox Text="{Binding UpdateAndDeleteViewModel.Firstname}"/>
+                <TextBlock Text="Lastname:"/>
+                <TextBox Text="{Binding UpdateAndDeleteViewModel.Lastname}"/>
+                <TextBlock Text="Job:"/>
+                <ComboBox SelectedIndex="{Binding UpdateAndDeleteViewModel.Job}">
+                    <TextBlock Text="Barista"/>
+                    <TextBlock Text="Farrier"/>
+                    <TextBlock Text="Seller"/>
+                    <TextBlock Text="Turner"/>
+                </ComboBox>
+                <Button Margin="10,5,10,0"
+                        Content="Update"/>
+                <Button Margin="10,5,10,0"
+                        Content="Delete"
+                        FontWeight="Bold"
+                        Background="Red"/>
+            </StackPanel>
         </Grid>
         <ListView Grid.Column="1"
                   Margin="5,0,5,0"
-                  x:Name="accountsViewModel">
-            
+                  x:Name="accountsViewModel"
+                  SelectedValue="{Binding SelectedAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
         </ListView>
     </Grid>
 </Window>

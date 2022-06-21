@@ -1,13 +1,24 @@
 ﻿using PersonnelAccounting.Model;
-using PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands;
-using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace PersonnelAccounting.ViewModel
 {
-    public class CreateAccountViewModel : INotifyPropertyChanged
+    public class UpdateAndDeleteViewModel : INotifyPropertyChanged
     {
+        private Visibility _visibility = Visibility.Collapsed;
+        
+        public Visibility Visibility
+        {
+            get => _visibility;
+            set
+            {
+                _visibility = value;
+                OnPropertyChanged(nameof(Visibility));
+            }
+        }
+
         private string? _nickname;
 
         public string? Nickname
@@ -19,7 +30,7 @@ namespace PersonnelAccounting.ViewModel
                 OnPropertyChanged(nameof(Nickname));
             }
         }
-        
+
         private string? _firstname;
 
         public string? Firstname
@@ -31,7 +42,7 @@ namespace PersonnelAccounting.ViewModel
                 OnPropertyChanged(nameof(Firstname));
             }
         }
-        
+
         private string? _lastname;
 
         public string? Lastname
@@ -56,53 +67,21 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
-        public Account? Account { get; private set; } 
-
-        public CreateAccountCommand? CreateAccountCommand { get; private set; }
-
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        public CreateAccountViewModel()
-        {
-            CreateAccountCommand = new CreateAccountCommand(this);
-        }
 
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool IsFieldsFilled()
+        public void SwitchVisibility(Visibility visibility) => Visibility = visibility;
+
+        public void FillFields(Account? account)
         {
-            if (Nickname is null || Firstname is null || Lastname is null || Job is null)
-                return false;
-
-            return true;
-        }
-
-        public void CreateAccount(ComboBox? comboBox)
-        {
-            Random random = new();
-
-            Account = new Account
-            {
-                Nickname = this.Nickname,
-                Owner = new Owner
-                {
-                    Firstname = this.Firstname,
-                    Lastname = this.Lastname,
-                    Job = new Job
-                    {
-                        Name = Job,
-                        Salary = random.Next(100, 300)
-                    }
-                }
-            };
-
-            Nickname = String.Empty;
-            Firstname = String.Empty;
-            Lastname = String.Empty;
-            comboBox.SelectedIndex = -1;
+            Nickname = account?.Nickname;
+            Firstname = account?.Owner?.Firstname;
+            Lastname = account?.Owner?.Lastname;
+            Job = account?.Owner?.Job?.Name;
         }
     }
 }

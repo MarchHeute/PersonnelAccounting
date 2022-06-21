@@ -56,6 +56,30 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
+        private int _index;
+
+        public int Index
+        {
+            get => _index;
+            set
+            {
+                _index = value;
+                OnPropertyChanged(nameof(Index));
+            }
+        }
+
+        private decimal _salary;
+
+        public decimal Salary
+        {
+            get => _salary;
+            set
+            {
+                _salary = value;
+                OnPropertyChanged(nameof(Salary));
+            }
+        }
+
         public Account? Account { get; private set; } 
 
         public CreateAccountCommand? CreateAccountCommand { get; private set; }
@@ -94,6 +118,7 @@ namespace PersonnelAccounting.ViewModel
                     Job = new Job
                     {
                         Name = Job,
+                        Index = this.Index,
                         Salary = random.Next(100, 300)
                     }
                 }

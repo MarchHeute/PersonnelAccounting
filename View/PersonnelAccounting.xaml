@@ -41,12 +41,14 @@
                 <TextBlock Text="Lastname:"/>
                 <TextBox Text="{Binding UpdateAndDeleteViewModel.Lastname}"/>
                 <TextBlock Text="Job:"/>
-                <ComboBox SelectedIndex="{Binding UpdateAndDeleteViewModel.Job}">
+                <ComboBox SelectedIndex="{Binding UpdateAndDeleteViewModel.Index}">
                     <TextBlock Text="Barista"/>
                     <TextBlock Text="Farrier"/>
                     <TextBlock Text="Seller"/>
                     <TextBlock Text="Turner"/>
                 </ComboBox>
+                <TextBlock Text="Salary:"/>
+                <TextBox Text="{Binding UpdateAndDeleteViewModel.Salary}"/>
                 <Button Margin="10,5,10,0"
                         Content="Update"/>
                 <Button Margin="10,5,10,0"

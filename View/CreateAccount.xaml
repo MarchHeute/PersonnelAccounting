@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PersonnelAccounting.View"
         xmlns:vm="clr-namespace:PersonnelAccounting.ViewModel"
         mc:Ignorable="d"
-        Title="CreateAccount" Height="250" Width="400"
+        Title="CreateAccount" Height="300" Width="400"
         DataContext="{DynamicResource viewModel}">
     <Window.Resources>
         <vm:CreateAccountViewModel x:Key="viewModel"/>
@@ -21,12 +21,15 @@
             <TextBox Text="{Binding Lastname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Choose job:"/>
             <ComboBox SelectedValue="{Binding Job, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedIndex="{Binding Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       x:Name="jobComboBox">
                 <TextBlock Text="Barista"/>
                 <TextBlock Text="Farrier"/>
                 <TextBlock Text="Seller"/>
                 <TextBlock Text="Turner"/>
             </ComboBox>
+            <TextBlock Text="Enter salary:"/>
+            <TextBox Text="{Binding Salary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Margin="0,5,0,0"
                     Content="Create"
                     Command="{Binding CreateAccountCommand}"

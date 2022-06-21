@@ -8,7 +8,8 @@ namespace PersonnelAccounting.Model
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+        public int? Index { get; set; }
         public string? Name { get; set; }
-        public decimal Salary { get; set; }
+        public decimal? Salary { get; set; }
     }
 }

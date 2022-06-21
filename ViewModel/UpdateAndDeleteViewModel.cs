@@ -67,6 +67,30 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
+        private int? _index;
+
+        public int? Index
+        {
+            get => _index;
+            set
+            {
+                _index = value;
+                OnPropertyChanged(nameof(Index));
+            }
+        }
+
+        private decimal? _salary;
+
+        public decimal? Salary
+        {
+            get => _salary;
+            set
+            {
+                _salary = value;
+                OnPropertyChanged(nameof(Salary));
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
@@ -81,7 +105,9 @@ namespace PersonnelAccounting.ViewModel
             Nickname = account?.Nickname;
             Firstname = account?.Owner?.Firstname;
             Lastname = account?.Owner?.Lastname;
+            Index = account?.Owner?.Job?.Index;
             Job = account?.Owner?.Job?.Name;
+            Salary = account?.Owner?.Job?.Salary;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using PersonnelAccounting.Model;
-using PersonnelAccounting.View;
+﻿using PersonnelAccounting.View;
 using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands
@@ -22,7 +22,7 @@ namespace PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands
 
         public bool CanExecute(object? parameter)
         {
-            return PersonnelAccountingViewModel?.Accounts is not null;
+            return PersonnelAccountingViewModel.IsAccountsEmpty();
         }
 
         public void Execute(object? parameter)
@@ -33,6 +33,8 @@ namespace PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands
             var createAccountViewModel = createAccount.DataContext as CreateAccountViewModel;
 
             PersonnelAccountingViewModel?.AddAccountIntoDatabase(createAccountViewModel.Account);
+
+            PersonnelAccountingViewModel?.ReadCommand.Execute(parameter as ListView);
         }
     }
 }

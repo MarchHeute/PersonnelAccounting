@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -29,9 +28,9 @@ namespace PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands
 
             listView?.Items.Clear();
 
-            if (PersonnelAccountingViewModel.Accounts is not null)
+            if (PersonnelAccountingViewModel.IsAccountsEmpty())
             {
-                foreach (var account in PersonnelAccountingViewModel.Accounts.AsQueryable().ToList())
+                foreach (var account in PersonnelAccountingViewModel.GetAccounts())
                     listView?.Items.Add($"Account: {account.Nickname}");
             }
         }

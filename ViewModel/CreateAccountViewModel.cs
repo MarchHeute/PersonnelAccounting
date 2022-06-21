@@ -19,7 +19,7 @@ namespace PersonnelAccounting.ViewModel
                 OnPropertyChanged(nameof(Nickname));
             }
         }
-        
+
         private string? _firstname;
 
         public string? Firstname
@@ -31,7 +31,7 @@ namespace PersonnelAccounting.ViewModel
                 OnPropertyChanged(nameof(Firstname));
             }
         }
-        
+
         private string? _lastname;
 
         public string? Lastname
@@ -44,9 +44,9 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
-        private string? _job;
+        private TextBlock? _job;
 
-        public string? Job
+        public TextBlock? Job
         {
             get => _job;
             set
@@ -56,9 +56,9 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
-        private int _index;
+        private int? _index;
 
-        public int Index
+        public int? Index
         {
             get => _index;
             set
@@ -68,9 +68,9 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
-        private decimal _salary;
+        private decimal? _salary;
 
-        public decimal Salary
+        public decimal? Salary
         {
             get => _salary;
             set
@@ -80,7 +80,7 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
-        public Account? Account { get; private set; } 
+        public Account? Account { get; private set; }
 
         public CreateAccountCommand? CreateAccountCommand { get; private set; }
 
@@ -117,7 +117,7 @@ namespace PersonnelAccounting.ViewModel
                     Lastname = this.Lastname,
                     Job = new Job
                     {
-                        Name = Job,
+                        Name = Job.Text,
                         Index = this.Index,
                         Salary = random.Next(100, 300)
                     }
@@ -127,6 +127,7 @@ namespace PersonnelAccounting.ViewModel
             Nickname = String.Empty;
             Firstname = String.Empty;
             Lastname = String.Empty;
+            Salary = null;
             comboBox.SelectedIndex = -1;
         }
     }

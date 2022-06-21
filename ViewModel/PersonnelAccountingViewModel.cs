@@ -2,6 +2,7 @@
 using PersonnelAccounting.Model;
 using PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -12,13 +13,14 @@ namespace PersonnelAccounting.ViewModel
     {
         private IMongoDatabase? _mongoDatabase;
 
-        public IMongoCollection<Account>? Accounts { get; private set; }
 
         public CreateCommand? CreateCommand { get; private set; }
 
         public ReadCommand? ReadCommand { get; private set; }
 
         public UpdateAndDeleteViewModel? UpdateAndDeleteViewModel { get; private set; }
+
+        private IMongoCollection<Account>? _accounts;
 
         private string? _selectedAccount;
 
@@ -43,7 +45,7 @@ namespace PersonnelAccounting.ViewModel
             CreateCommand = new CreateCommand(this);
             ReadCommand = new ReadCommand(this);
 
-            UpdateAndDeleteViewModel = new UpdateAndDeleteViewModel();
+            UpdateAndDeleteViewModel = new UpdateAndDeleteViewModel(this);
         }
 
         private void CreateConnection()
@@ -83,7 +85,7 @@ namespace PersonnelAccounting.ViewModel
         {
             try
             {
-                Accounts = _mongoDatabase?.GetCollection<Account>("accounts");
+                _accounts = _mongoDatabase?.GetCollection<Account>("Accounts");
             }
             catch (Exception exception)
             {
@@ -95,7 +97,19 @@ namespace PersonnelAccounting.ViewModel
         {
             try
             {
-                Accounts?.InsertOne(account);
+                _accounts?.InsertOne(account);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void UpdateAccountInDatabase(Account account)
+        {
+            try
+            {
+                _accounts.ReplaceOne(a => a.Nickname == SelectedAccount, account);
             }
             catch (Exception exception)
             {
@@ -109,7 +123,7 @@ namespace PersonnelAccounting.ViewModel
 
             try
             {
-                account = Accounts.Find(a => a.Nickname == SelectedAccount).FirstOrDefault();
+                account = _accounts.Find(a => a.Nickname == SelectedAccount).FirstOrDefault();
             }
             catch (Exception exception)
             {
@@ -118,5 +132,9 @@ namespace PersonnelAccounting.ViewModel
 
             return account;
         }
+
+        public bool IsAccountsEmpty() => _accounts is not null;
+
+        public List<Account> GetAccounts() => _accounts.AsQueryable().ToList();
     }
 }

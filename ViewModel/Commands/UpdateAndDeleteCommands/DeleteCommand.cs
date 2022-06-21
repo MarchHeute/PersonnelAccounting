@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Windows.Input;
-namespace PersonnelAccounting.ViewModel.Commands.CreatingAccountCommands
+namespace PersonnelAccounting.ViewModel.Commands.UpdateAndDeleteCommands
 {
     public class DeleteCommand : ICommand
     {
+        public UpdateAndDeleteViewModel? UpdateAndDeleteViewModel { get; private set; }
+
         public event EventHandler? CanExecuteChanged;
+
+        public DeleteCommand(UpdateAndDeleteViewModel? updateAndDeleteViewModel)
+        {
+            UpdateAndDeleteViewModel = updateAndDeleteViewModel;
+        }
 
         public bool CanExecute(object? parameter)
         {

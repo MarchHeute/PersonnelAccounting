@@ -1,4 +1,6 @@
 ﻿using PersonnelAccounting.Model;
+using PersonnelAccounting.ViewModel.Commands.UpdateAndDeleteCommands;
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,7 +10,7 @@ namespace PersonnelAccounting.ViewModel
     public class UpdateAndDeleteViewModel : INotifyPropertyChanged
     {
         private Visibility _visibility = Visibility.Collapsed;
-        
+
         public Visibility Visibility
         {
             get => _visibility;
@@ -55,9 +57,9 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
-        private string? _job;
+        private TextBlock? _job;
 
-        public string? Job
+        public TextBlock? Job
         {
             get => _job;
             set
@@ -91,7 +93,24 @@ namespace PersonnelAccounting.ViewModel
             }
         }
 
+        public PersonnelAccountingViewModel? PersonnelAccountingViewModel { get; private set; }
+
+        public UpdateCommand? UpdateCommand { get; private set; }
+
+        public DeleteCommand? DeleteCommand { get; private set; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private Account? _selectedAccount;
+        private Account? _createdAccount;
+
+        public UpdateAndDeleteViewModel(PersonnelAccountingViewModel personnelAccountingViewModel)
+        {
+            PersonnelAccountingViewModel = personnelAccountingViewModel;
+
+            UpdateCommand = new UpdateCommand(this);
+            DeleteCommand = new DeleteCommand(this);
+        }
 
         private void OnPropertyChanged(string propertyName)
         {
@@ -106,8 +125,58 @@ namespace PersonnelAccounting.ViewModel
             Firstname = account?.Owner?.Firstname;
             Lastname = account?.Owner?.Lastname;
             Index = account?.Owner?.Job?.Index;
-            Job = account?.Owner?.Job?.Name;
             Salary = account?.Owner?.Job?.Salary;
+
+            _selectedAccount = account;
+        }
+
+        public bool IsAccountChanged()
+        {
+            if (this.Job is null)
+                return false;
+
+            if (_selectedAccount is null)
+                return false;
+
+            _createdAccount = new()
+            {
+                Id = _selectedAccount.Id,
+                Nickname = this.Nickname,
+                Owner = new Owner
+                {
+                    Firstname = this.Firstname,
+                    Lastname = this.Lastname,
+                    Job = new Job
+                    {
+                        Index = this.Index,
+                        Name = this.Job.Text,
+                        Salary = this.Salary
+                    }
+                }
+            };
+
+            return _selectedAccount.Nickname != _createdAccount.Nickname ||
+                _selectedAccount.Owner.Firstname != _createdAccount.Owner.Firstname ||
+                _selectedAccount.Owner.Lastname != _createdAccount.Owner.Lastname ||
+                _selectedAccount.Owner.Job.Index != _createdAccount.Owner.Job.Index ||
+                _selectedAccount.Owner.Job.Salary != _createdAccount.Owner.Job.Salary;
+        }
+
+        public void UpdateSelectedAccount(ListView? listView)
+        {
+            PersonnelAccountingViewModel?.UpdateAccountInDatabase(_createdAccount);
+            PersonnelAccountingViewModel?.ReadCommand.Execute(listView);
+            ClearFields();
+        }
+
+        private void ClearFields()
+        {
+            Visibility = Visibility.Collapsed;
+            Nickname = String.Empty;
+            Firstname = String.Empty;
+            Lastname = String.Empty;
+            Index = -1;
+            Salary = null;
         }
     }
 }
